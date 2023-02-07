@@ -35,9 +35,12 @@ const app = next({
 const routes = require('./routes');
 const handler = routes.getRequestHandler(app);
 
+port=process.env.PORT||3000
+
+
 app.prepare().then(() => {
-	exp.use(handler).listen(3000, function () {
-		console.log('Node server listening on port 3000');
+	exp.use(handler).listen(port, function () {
+		console.log(`Node server listening on port ${port}`);
 	});
 });
 
