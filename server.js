@@ -35,7 +35,7 @@ const app = next({
 const routes = require('./routes');
 const handler = routes.getRequestHandler(app);
 
-port=process.env.PORT||3000
+const port=process.env.PORT||3000
 
 
 app.prepare().then(() => {
