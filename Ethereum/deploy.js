@@ -10,7 +10,7 @@ const eF = require('./Build/ElectionFact.json');
 
 const provider = new HDWalletProvider(
 	'soda primary wheel try parrot such unfair swarm obvious collect tobacco blouse',
-	'https://goerli.infura.io/v3/29bcae4ee7454a118a2b0f0f4d86c0e0'
+	'https://goerli.infura.io/v3/29bcae4ee7454a118a2b0f0f4d86c0e0' 
 );
 const web3 = new Web3(provider);
 
