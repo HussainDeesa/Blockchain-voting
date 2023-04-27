@@ -12,6 +12,7 @@ class VotingList extends Component {
         election_name: '',
         election_description: '',
         emailArr: [],
+        dobArr:[],
         idArr: [],
         item: [],
     }
@@ -22,6 +23,7 @@ class VotingList extends Component {
         var params = 'election_address='+this.state.election_address;
         http.open("POST", url, true);
         let email=[];
+        let dob=[];
         let id=[]
         //Send the proper header information along with the request
         http.setRequestHeader(
@@ -34,7 +36,9 @@ class VotingList extends Component {
                 var responseObj = JSON.parse(http.responseText);
                 if(responseObj.status=="success") {
                   for (let voter of responseObj.data.voters) {
-                        email.push(voter.email);
+                    console.log(voter);
+                        email.push(voter.aadhaar);
+                        dob.push(voter.dob)
                         id.push(voter.id);    
                   } 
                 }                
@@ -64,15 +68,34 @@ class VotingList extends Component {
         ia = this.state.idArr[0];            
         
         let i=-1;
+        let curr_date=new Date();
+        let curr_year=curr_date.getFullYear()
         const items = ia.map(ia => {
             i++;
+            let dob_year=dob[i].slice(0,4);
+            let age=curr_year-dob_year
+            let eligible
+            let eligiblecolor
+            if(age>=18){
+               eligible="Eligible"
+               eligiblecolor="green"
+            }
+            else{
+              eligible="Not Eligible"
+              eligiblecolor="red"
+            }
             return {
+              
               header: email[i],
               description: (
-                <div>                
+                <div>  
+                  <span style={{marginTop:"10px",marginBottom:"10px",display:"inline-block"}}>
+                  Age : {age}         
+
+                  </span>
                   <br />
                   
-                  <Modal size={"tiny"} trigger={
+                  {/* <Modal size={"tiny"} trigger={
                       <Button basic id={ia} color="green">                        
                         Edit
                       </Button>
@@ -97,8 +120,10 @@ class VotingList extends Component {
                         <Button negative>No</Button>
                       </Modal.Actions>
                     </center>
-                  </Modal>
+                  </Modal> */}
+                  
                   <Button negative basic id={ia} value={ia} onClick={this.deleteEmail}>Delete</Button>
+                  <span style={{color:eligiblecolor,marginLeft:"75px",fontSize:"16px"}} >{eligible}</span>
                 </div>
               )
             };
@@ -215,10 +240,12 @@ class VotingList extends Component {
     register = event => {
 
 		const email = document.getElementById('register_voter_email').value;
+		const dob = document.getElementById('register_voter_DOB').value;
+		const aadhaar = document.getElementById('register_voter_Aadhaar').value;
     
 		var http = new XMLHttpRequest();
         var url = "/voter/register";
-        var params = "email=" + email+"&election_address=" + this.state.election_address+ "&election_name=" + this.state.election_name + "&election_description=" + this.state.election_description;
+        var params = "email=" + email+"&election_address=" + this.state.election_address+ "&election_name=" + this.state.election_name + "&election_description=" + this.state.election_description+"&dob="+dob+"&aadhaar="+aadhaar;
         http.open("POST", url, true);
         //Send the proper header information along with the request
         http.setRequestHeader(
@@ -275,11 +302,29 @@ class VotingList extends Component {
                       <br/>
                       <Form.Group size='large' style={{ marginLeft: '15%', marginRight: '15%' }} >
                         <Form.Input
-						style={{marginTop: '10px'}}
+						style={{marginTop: '10px',marginBottom:'10px'}}
                           fluid
                           id='register_voter_email'
                           label='Email:'
                           placeholder='Enter your email.'
+                          textAlign='center'
+                        />
+                 
+                        <Form.Input
+						style={{marginTop: '10px',marginBottom:'10px'}}
+                          fluid
+                          id='register_voter_DOB'
+                          label='DOB:'
+                          placeholder='Enter your DOB.'
+                          textAlign='center'
+                          type="Date"
+                        />
+                        <Form.Input
+						style={{marginTop: '10px',marginBottom:'10px'}}
+                          fluid
+                          id='register_voter_Aadhaar'
+                          label='Aadhaar:'
+                          placeholder='Enter your Aadhaae.'
                           textAlign='center'
                         />
 

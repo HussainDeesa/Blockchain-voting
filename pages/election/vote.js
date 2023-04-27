@@ -46,7 +46,7 @@ class VotingList extends Component {
 
     signOut() {
           Cookies.remove('address');
-          Cookies.remove('voter_email');
+          Cookies.remove('voter_aadhaar');
           alert("Logging out.");
           Router.push('/homepage');
     }
@@ -121,7 +121,7 @@ class VotingList extends Component {
         const accounts = await web3.eth.getAccounts();
         const add = Cookies.get('address');
         const election = Election(add);
-        await election.methods.vote(e,Cookies.get('voter_email')).send({from: accounts[0]});
+        await election.methods.vote(e,Cookies.get('voter_aadhaar')).send({from: accounts[0]});
         alert("Voted!")
     }
   

@@ -20,6 +20,8 @@ module.exports = {
             VoterModel.create(
               {
                 email: req.body.email,
+                aadhaar:req.body.aadhaar,
+                dob:req.body.dob,
                 password: req.body.email,
                 election_address: req.body.election_address,
               },
@@ -99,8 +101,9 @@ module.exports = {
   },
 
   authenticate: function (req, res, cb) {
+    console.log(req);
     VoterModel.findOne(
-      { email: req.body.email, password: req.body.password },
+      { aadhaar: req.body.aadhaar, dob: req.body.dob },
       function (err, voterInfo) {
         if (err) cb(err);
         else {
@@ -111,13 +114,14 @@ module.exports = {
               data: {
                 id: voterInfo._id,
                 election_address: voterInfo.election_address,
+                dob:voterInfo.dob
               },
             });
           //res.sendFile(path.join(__dirname+'/index.html'));
           else {
             res.json({
               status: "error",
-              message: "Invalid email/password!!!",
+              message: "Invalid Aadhaar/DOB!!!",
               data: null,
             });
           }
@@ -135,7 +139,7 @@ module.exports = {
         if (err) cb(err);
         else {
           for (let voter of voters)
-            voterList.push({ id: voter._id, email: voter.email });
+            voterList.push({ id: voter._id, email: voter.email,aadhaar:voter.aadhaar,dob:voter.dob });
 
           count = voterList.length;
 

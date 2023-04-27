@@ -28,6 +28,7 @@ const HomepageHeading = ({ mobile }) => (
         fontSize: mobile ? "2em" : "3em",
         fontWeight: "normal",
         marginBottom: 0,
+        color:"white",
         marginTop: mobile ? "1.5em" : "2em",
         color: "black",
       }}
@@ -99,7 +100,7 @@ class DesktopContainer extends Component {
           href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
         />
         <Helmet>
-          <title>HomePage</title>
+          <title>E-Votes</title>
           <link
             rel="shortcut icon"
             type="image/x-icon"
@@ -130,12 +131,12 @@ class DesktopContainer extends Component {
                   style={{
                     color: "#627eea",
                     verticalAlign: "middle",
-                    fontFamily: "Freestyle Script",
+                    fontFamily: "Rubik Iso cursive",
                     fontSize: "400%",
-                    paddingLeft: "42%",
+                    paddingLeft: "42%",  
                   }}
                 >
-                  BlockVotes
+                  E-Votes
                 </h1>
               </Container>
             </Menu>

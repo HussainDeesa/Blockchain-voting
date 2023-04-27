@@ -5,6 +5,7 @@ import { Router } from '../routes';
 import { Helmet } from 'react-helmet';
 
 class LoginForm extends Component {
+	
 	state = {
 		election_address: '',
 	};
@@ -31,18 +32,18 @@ class LoginForm extends Component {
 								fluid
 								icon="user"
 								iconPosition="left"
-								placeholder="Email"
+								placeholder="Aadhaar"
 								style={{ padding: 5 }}
-								id="signin_email"
+								id="aadhaar"
 							/>
 							<Form.Input
 								style={{ padding: 5 }}
 								fluid
-								id="signin_password"
-								icon="lock"
+								id="dob"
+								icon="calendar alternate icon"
 								iconPosition="left"
-								placeholder="Password"
-								type="password"
+								placeholder="DOB"
+								type="date"
 							/>
 
 							<Button color="blue" fluid size="large" style={{ marginBottom: 15 }} onClick={this.signin}>
@@ -55,11 +56,12 @@ class LoginForm extends Component {
 		</div>
 	);
 	signin = event => {
-		const email = document.getElementById('signin_email').value;
-		const password = document.getElementById('signin_password').value;
+		let curr_year=new Date().getFullYear();
+		const aadhaar = document.getElementById('aadhaar').value;
+		const dob = document.getElementById('dob').value;
 		var http = new XMLHttpRequest();
 		var url = 'voter/authenticate';
-		var params = 'email=' + email + '&password=' + password;
+		var params = 'aadhaar=' + aadhaar + '&dob=' + dob;
 		http.open('POST', url, true);
 		//Send the proper header information along with the request
 		http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -68,9 +70,16 @@ class LoginForm extends Component {
 			if (http.readyState == 4 && http.status == 200) {
 				var responseObj = JSON.parse(http.responseText);
 				if (responseObj.status == 'success') {
-					Cookies.set('voter_email', encodeURI(email));
-					Cookies.set('address', encodeURI(responseObj.data.election_address));
-					Router.push(`/election/${responseObj.data.election_address}/vote`);
+					let dob_year=responseObj.data.dob.slice(0,4);
+					let age=curr_year-dob_year
+					if(age<18){
+						alert("User Not eligible for Voting")
+					}
+					else{
+						Cookies.set('voter_aadhaar', encodeURI(aadhaar));
+						Cookies.set('address', encodeURI(responseObj.data.election_address));
+						Router.push(`/election/${responseObj.data.election_address}/vote`);
+					}
 				} else {
 					alert(responseObj.message);
 				}

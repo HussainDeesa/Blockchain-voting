@@ -3,7 +3,8 @@
 /*     background-image: url("bg2.png");    
  */
  background-color: #0688ba;
-  background: url('/static/banner.jpg') no-repeat;
+  background: url('/static/banner.jpg') 
+  no-repeat;
 /*  background-size:cover; */
  background-origin: inherit;
 
