@@ -1,5 +1,5 @@
 {
-  "name": "projecteth",
+  "name": "blockvotes",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
@@ -7,11 +7,13 @@
     "@remix-project/remixd": "^0.6.11",
     "@truffle/hdwallet-provider": "^2.1.5",
     "@zeit/next-css": "^1.0.1",
+    "aws-sdk": "^2.1367.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.18.3",
     "chart.js": "^2.8.0",
     "chartjs": "^0.3.24",
     "chartjs-plugin-annotation": "^0.5.7",
+    "child_process": "^1.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1",
@@ -40,8 +42,11 @@
     "test": "mocha",
     "start": "node server.js"
   },
+  "browser": {
+    "child_process": false
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "A blockchain-based E-voting system, created for the final year project of my college, with the help of my Project partners, Sayyam Gada and Charmee Mehta."
+  "description": "A blockchain-based E-voting system"
 }

@@ -80,7 +80,11 @@ class LoginForm extends Component {
 						Cookies.set('address', encodeURI(responseObj.data.election_address));
 						Router.push(`/election/${responseObj.data.election_address}/vote`);
 					}
-				} else {
+				}  
+				else if(responseObj.election_status == "end"){
+					alert("Election has ended!!")
+				}
+				else {
 					alert(responseObj.message);
 				}
 			}

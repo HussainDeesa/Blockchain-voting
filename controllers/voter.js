@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 
 var nodemailer = require("nodemailer");
+const { log } = require("console");
 
 const saltRounds = 10;
 
@@ -100,14 +101,27 @@ module.exports = {
     );
   },
 
-  authenticate: function (req, res, cb) {
+  authenticate: async function (req, res, cb) {
     console.log(req);
-    VoterModel.findOne(
+    console.log(req.body.aadhaar);
+    console.log(req.body.dob);
+    console.log(+req.body.aadhaar+req.body.dob);
+    const salt = await bcrypt.genSalt(10)
+    data=req.body.aadhaar+req.body.dob
+    veriferhash=await bcrypt.hash(data,salt)
+    console.log("Verifer hash "+veriferhash);
+    VoterModel.findOne( 
       { aadhaar: req.body.aadhaar, dob: req.body.dob },
-      function (err, voterInfo) {
+     async function (err, voterInfo) {
+      if(voterInfo){
+        proverdata=voterInfo.aadhaar+voterInfo.dob
+        proverhash=await bcrypt.hash(proverdata,salt)
+        console.log("Prover hash "+proverhash);
+      }
         if (err) cb(err);
         else {
-          if (voterInfo)
+          if (voterInfo && voterInfo.election_status==true){
+            console.log("ZKP status true");
             res.json({
               status: "success",
               message: "voter found!!!",
@@ -116,9 +130,16 @@ module.exports = {
                 election_address: voterInfo.election_address,
                 dob:voterInfo.dob
               },
+            }); 
+          }
+          else if(voterInfo && voterInfo.election_status==false){
+            res.json({
+              election_status:"end",
             });
+          }
           //res.sendFile(path.join(__dirname+'/index.html'));
           else {
+            console.log("ZKP status false");
             res.json({
               status: "error",
               message: "Invalid Aadhaar/DOB!!!",
@@ -128,6 +149,23 @@ module.exports = {
         }
       }
     );
+  },
+
+  changestatus: function (req, res, cb) {
+    console.log("changing statuses");
+    VoterModel.updateMany(
+				{ election_address:req.body.election_address},{$set:{election_status:false}},
+				function (err, voterInfo) {
+				  if (!err) {
+            res.json({
+              status: "success"
+            });
+          }
+				  else {
+						console.log("updated successfully");
+				  }
+				} 
+			  );
   },
 
   getAll: function (req, res, cb) {

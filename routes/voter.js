@@ -7,4 +7,5 @@ router.post('/', voterController.getAll);
 router.put('/:voterId', voterController.updateById);
 router.delete('/:voterId', voterController.deleteById);
 router.post('/resultMail', voterController.resultMail);
+router.post('/changestatus', voterController.changestatus);
 module.exports = router;

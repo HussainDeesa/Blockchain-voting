@@ -23,6 +23,11 @@ const VoterSchema = new Schema ({
     election_address: {
         type: String,
         required: true
+    },
+    election_status:{
+        type:Boolean,
+        required:true,
+        default:true
     }
 });
 // hash user password before saving into database
@@ -31,6 +36,7 @@ VoterSchema.pre('save', function(cb) {
     cb();
 });
 
-const VoterList=mongoose.model('VoterList', VoterSchema)
+const VoterList=mongoose.models["VoterList"]||mongoose.model('VoterList', VoterSchema)
 module.exports=VoterList
+// exports.default=VoterList 
 // module.exports = mongoose.model('VoterList', VoterSchema)
