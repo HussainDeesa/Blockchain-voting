@@ -23,7 +23,6 @@ module.exports = {
                 email: req.body.email,
                 aadhaar:req.body.aadhaar,
                 dob:req.body.dob,
-                password: req.body.email,
                 election_address: req.body.election_address,
               },
               function (err, voter) {
@@ -36,56 +35,12 @@ module.exports = {
                   console.log(req.body.election_description);
 
                   console.log(req.body.election_name);
-
-                  var transporter = nodemailer.createTransport({
-                    service: "gmail",
-
-                    auth: {
-                      user: process.env.EMAIL,
-
-                      pass: process.env.PASSWORD,
-                    },
+                  res.json({
+                    status: "success",
+                    message: "Voter added successfully!!!",
+                    data: null,
                   });
-
-                  console.log(process.env.EMAIL);
-                  console.log(process.env.PASSWORD);
-                  
-                  const mailOptions = {
-                    from: process.env.EMAIL, // sender address
-                    
-                    to: voter.email, // list of receivers
-
-                    subject: req.body.election_name, // Subject line
-
-                    html:
-                      req.body.election_description +
-                      "<br>Your voting id is:" +
-                      voter.email +
-                      "<br>" +
-                      "Your password is:" +
-                      voter.password +
-                      '<br><a href="http://localhost:3000/homepage">Click here to visit the website</a>', // plain text body
-                  };
-
-                  transporter.sendMail(mailOptions, function (err, info) {
-                    if (err) {
-                      res.json({
-                        status: "error",
-                        message: "Voter could not be added",
-                        data: null,
-                      });
-
-                      console.log(err);
-                    } else {
-                      console.log(info);
-
-                      res.json({
-                        status: "success",
-                        message: "Voter added successfully!!!",
-                        data: null,
-                      });
-                    }
-                  });
+                
                 }
               }
             );
@@ -152,9 +107,28 @@ module.exports = {
   },
 
   changestatus: function (req, res, cb) {
+   
     console.log("changing statuses");
     VoterModel.updateMany(
 				{ election_address:req.body.election_address},{$set:{election_status:false}},
+				function (err, voterInfo) {
+				  if (!err) {
+            res.json({
+              status: "success"
+            });
+          }
+				  else {
+						console.log("updated successfully");
+				  }
+				} 
+			  );
+    
+  },
+  
+  changestatustrue: function (req, res, cb) {
+    console.log("changing statuses");
+    VoterModel.updateMany(
+				{ election_address:req.body.election_address},{$set:{election_status:true}},
 				function (err, voterInfo) {
 				  if (!err) {
             res.json({
@@ -200,7 +174,7 @@ module.exports = {
         console.log("email:" + req.body.email);
         console.log("findOne:" + result);
         if (!result) {
-          password = bcrypt.hashSync(req.body.email, saltRounds);
+    
           console.log("email not found");
           console.log("voterID:" + req.params.voterId);
           VoterModel.findByIdAndUpdate(

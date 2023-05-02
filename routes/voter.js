@@ -8,4 +8,5 @@ router.put('/:voterId', voterController.updateById);
 router.delete('/:voterId', voterController.deleteById);
 router.post('/resultMail', voterController.resultMail);
 router.post('/changestatus', voterController.changestatus);
+router.post('/changestatustrue', voterController.changestatustrue);
 module.exports = router;

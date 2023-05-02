@@ -129,7 +129,7 @@ class VotingList extends Component {
                 }
             );       
         })
-            alert("Added!");
+            
         } catch (err) {
             alert("Error in file processing.");
         }

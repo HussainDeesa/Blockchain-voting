@@ -16,10 +16,6 @@ const VoterSchema = new Schema ({
         type:String,
         required:true
     },
-    password: {
-        type: String,
-        required: true
-    },
     election_address: {
         type: String,
         required: true
@@ -31,10 +27,10 @@ const VoterSchema = new Schema ({
     }
 });
 // hash user password before saving into database
-VoterSchema.pre('save', function(cb) {
-    this.password = bcrypt.hashSync(this.password, saltRounds);
-    cb();
-});
+// VoterSchema.pre('save', function(cb) {
+//     this.password = bcrypt.hashSync(this.password, saltRounds);
+//     cb();
+// });
 
 const VoterList=mongoose.models["VoterList"]||mongoose.model('VoterList', VoterSchema)
 module.exports=VoterList

@@ -185,6 +185,7 @@ class ContainerExampleContainer extends Component {
 		alert('Logging out.');
 		Router.push('/homepage');
 	}
+	
 	endElection = async event => {
 		console.log("endelection");
 		var http = new XMLHttpRequest();
@@ -205,56 +206,28 @@ class ContainerExampleContainer extends Component {
 			}
 		};
 		http.send(params);
-		let candidate = 0;
-		try {
-			// VoterModel.updateMany(
-			// 	{ election_address:Cookies.get("address")},{$set:{election_status:false}},
-			// 	function (err, voterInfo) {
-			// 	  if (err) cb(err);
-			// 	  else {
-			// 			console.log("updated successfully");
-			// 	  }
-			// 	} 
-			//   );
-			// this.setState({ loading: true });
-			// const add = Cookies.get('address');
-			// const election = Election(add);
-			// console.log(election);
-			// candidate = await election.methods.winnerCandidate().call();
-			// console.log(candidate);
-			// cand = await election.methods.getCandidate(candidate).call(); 
-			// console.log(cand);
-			// var http = new XMLHttpRequest();
-			// var url = '/voter/resultMail';
-			// var params =
-			// 	'election_address=' +
-			// 	Cookies.get('address') +
-			// 	'&election_name=' +
-			// 	this.state.election_name +
-			// 	'&candidate_email=' +
-			// 	cand[4] +
-			// 	'&winner_candidate=' +
-			// 	cand[0];
-			// http.open('POST', url, true);
-			// //Send the proper header information along with the request
-			// http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			// http.onreadystatechange = function () {
-			// 	//Call a function when the state changes.
-			// 	if (http.readyState == 4 && http.status == 200) {
-			// 		var responseObj = JSON.parse(http.responseText);
-			// 		if (responseObj.status == 'success') {
-			// 			alert('Mail sent!');
-			// 		} else {
-			// 			alert(responseObj.message);
-			// 		}
-			// 	}
-			// };
-			// this.setState({ loading: true });
-			// http.send(params);
-		} catch (err) {
-			console.log(err.message);
-		}
 	};
+	// startElection = async event => {
+	// 	console.log("endelection");
+	// 	var http = new XMLHttpRequest();
+	// 	var url = '/voter/changestatustrue';
+	// 	var params = 'election_address=' + Cookies.get("address")
+	// 	http.open('POST', url, true);
+	// 	//Send the proper header information along with the request
+	// 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	// 	http.onreadystatechange = function () {
+	// 		//Call a function when the state changes.
+	// 		if (http.readyState == 4 && http.status == 200) {
+	// 			var responseObj = JSON.parse(http.responseText);
+	// 			if (responseObj.status == 'success') {
+	// 				alert("Election started successfully!")
+	// 			} else {
+	// 				alert(responseObj.message);
+	// 			}
+	// 		}
+	// 	};
+	// 	http.send(params);
+	// };
 
 	returnModal = () => <h1>I won the election</h1>;
 
