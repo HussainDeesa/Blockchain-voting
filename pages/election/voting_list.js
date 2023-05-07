@@ -14,6 +14,7 @@ class VotingList extends Component {
         emailArr: [],
         dobArr:[],
         idArr: [],
+        phoneArr:[],
         item: [],
     }
 
@@ -24,7 +25,8 @@ class VotingList extends Component {
         http.open("POST", url, true);
         let email=[];
         let dob=[];
-        let id=[]
+        let id=[];
+        let phone=[];
         //Send the proper header information along with the request
         http.setRequestHeader(
             "Content-type",
@@ -39,14 +41,16 @@ class VotingList extends Component {
                     console.log(voter);
                         email.push(voter.aadhaar);
                         dob.push(voter.dob)
-                        id.push(voter.id);    
+                        id.push(voter.id);  
+                        phone.push(voter.phone)  
                   } 
                 }                
-            }
+            } 
         };
         http.send(params);
         this.state.emailArr.push(email);
         this.state.idArr.push(id);
+        this.state.phoneArr.push(phone);
 
         try {
             const add = Cookies.get('address');
@@ -66,7 +70,8 @@ class VotingList extends Component {
         ea = this.state.emailArr[0];
         let ia = [];
         ia = this.state.idArr[0];            
-        
+        let pa=[]
+        pa=this.state.phoneArr[0]
         let i=-1;
         let curr_date=new Date();
         let curr_year=curr_date.getFullYear()
@@ -90,8 +95,9 @@ class VotingList extends Component {
               description: (
                 <div>  
                   <span style={{marginTop:"10px",marginBottom:"10px",display:"inline-block"}}>
+                  Phone : {phone[i]}
+                 <br></br>
                   Age : {age}         
-
                   </span>
                   <br />
                   
@@ -239,13 +245,13 @@ class VotingList extends Component {
 
     register = event => {
 
-		const email = document.getElementById('register_voter_email').value;
+		const phone = document.getElementById('register_voter_phone').value;
 		const dob = document.getElementById('register_voter_DOB').value;
 		const aadhaar = document.getElementById('register_voter_Aadhaar').value;
     
 		var http = new XMLHttpRequest();
         var url = "/voter/register";
-        var params = "email=" + email+"&election_address=" + this.state.election_address+ "&election_name=" + this.state.election_name + "&election_description=" + this.state.election_description+"&dob="+dob+"&aadhaar="+aadhaar;
+        var params = "phone=" + phone+"&election_address=" + this.state.election_address+ "&election_name=" + this.state.election_name + "&election_description=" + this.state.election_description+"&dob="+dob+"&aadhaar="+aadhaar;
         http.open("POST", url, true);
         //Send the proper header information along with the request
         http.setRequestHeader(
@@ -304,9 +310,9 @@ class VotingList extends Component {
                         <Form.Input
 						style={{marginTop: '10px',marginBottom:'10px'}}
                           fluid
-                          id='register_voter_email'
-                          label='Email:'
-                          placeholder='Enter your email.'
+                          id='register_voter_phone'
+                          label='Phone:'
+                          placeholder='Enter your Phone.'
                           textAlign='center'
                         />
                  

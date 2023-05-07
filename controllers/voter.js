@@ -3,7 +3,8 @@ const VoterModel = require("../models/voter");
 const bcrypt = require("bcrypt");
 
 const path = require("path");
-
+const { createHmac }= require("node:crypto");
+const murmurhash = require('murmurhash')
 var nodemailer = require("nodemailer");
 const { log } = require("console");
 
@@ -12,7 +13,7 @@ const saltRounds = 10;
 module.exports = {
   create: function (req, res, cb) {
     VoterModel.findOne(
-      { email: req.body.email, election_address: req.body.election_address },
+      { phone: req.body.phone, election_address: req.body.election_address },
       function (err, result) {
         if (err) {
           cb(err);
@@ -20,7 +21,7 @@ module.exports = {
           if (!result) {
             VoterModel.create(
               {
-                email: req.body.email,
+                phone: req.body.phone,
                 aadhaar:req.body.aadhaar,
                 dob:req.body.dob,
                 election_address: req.body.election_address,
@@ -30,7 +31,7 @@ module.exports = {
                 else {
                   console.log(voter);
 
-                  console.log(voter.email);
+                  console.log(voter.phone);
 
                   console.log(req.body.election_description);
 
@@ -54,23 +55,40 @@ module.exports = {
         }
       }
     );
-  },
+  }, 
+  generateHash: async function(req,res,cb){
+    const salt = await bcrypt.genSalt(10)
+    data=req.body.str
+    console.log(salt);
 
+    const secret = 'abcdefg';
+    const hash = createHmac('sha256', secret)
+    .update(data)
+    .digest('hex');
+    res.json({
+      status: "success",
+      message: "Hash generated!!!",
+      data: {
+       hash:hash
+      },
+    });
+  },
   authenticate: async function (req, res, cb) {
     console.log(req);
     console.log(req.body.aadhaar);
     console.log(req.body.dob);
-    console.log(+req.body.aadhaar+req.body.dob);
+    console.log(req.body.aadhaar+req.body.dob);
     const salt = await bcrypt.genSalt(10)
-    data=req.body.aadhaar+req.body.dob
-    veriferhash=await bcrypt.hash(data,salt)
+    data=req.body.aadhaar+req.body.dob+req.body.phone
+    veriferhash=murmurhash.v2(data)
     console.log("Verifer hash "+veriferhash);
     VoterModel.findOne( 
-      { aadhaar: req.body.aadhaar, dob: req.body.dob },
-     async function (err, voterInfo) {
+      { aadhaar: req.body.aadhaar, dob: req.body.dob,phone:req.body.phone },
+      async function (err, voterInfo) {
+       const salt = await bcrypt.genSalt(10)
       if(voterInfo){
-        proverdata=voterInfo.aadhaar+voterInfo.dob
-        proverhash=await bcrypt.hash(proverdata,salt)
+        proverdata=voterInfo.aadhaar+voterInfo.dob+voterInfo.phone
+        proverhash=murmurhash.v2(proverdata)
         console.log("Prover hash "+proverhash);
       }
         if (err) cb(err);
@@ -97,7 +115,7 @@ module.exports = {
             console.log("ZKP status false");
             res.json({
               status: "error",
-              message: "Invalid Aadhaar/DOB!!!",
+              message: "Invalid Crediantials!",
               data: null,
             });
           }
@@ -151,7 +169,7 @@ module.exports = {
         if (err) cb(err);
         else {
           for (let voter of voters)
-            voterList.push({ id: voter._id, email: voter.email,aadhaar:voter.aadhaar,dob:voter.dob });
+            voterList.push({ id: voter._id, phone: voter.phone,aadhaar:voter.aadhaar,dob:voter.dob });
 
           count = voterList.length;
 
@@ -167,19 +185,19 @@ module.exports = {
   },
 
   updateById: function (req, res, cb) {
-    VoterModel.findOne({ email: req.body.email }, function (err, result) {
+    VoterModel.findOne({ phone: req.body.phone }, function (err, result) {
       if (err) {
         cb(err);
       } else {
-        console.log("email:" + req.body.email);
+        console.log("phone:" + req.body.phone);
         console.log("findOne:" + result);
         if (!result) {
     
-          console.log("email not found");
+          console.log("phone not found");
           console.log("voterID:" + req.params.voterId);
           VoterModel.findByIdAndUpdate(
             req.params.voterId,
-            { email: req.body.email, password: password },
+            { phone: req.body.phone, password: password },
             function (err, voter) {
               if (err) cb(err);
               console.log("update method object:" + voter);

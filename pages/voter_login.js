@@ -30,6 +30,14 @@ class LoginForm extends Component {
 							</Header>
 							<Form.Input
 								fluid
+								icon="phone"
+								iconPosition="left"
+								placeholder="Phone No"
+								style={{ padding: 5 }}
+								id="phone"
+							/>
+							<Form.Input
+								fluid
 								icon="user"
 								iconPosition="left"
 								placeholder="Aadhaar"
@@ -57,11 +65,12 @@ class LoginForm extends Component {
 	);
 	signin = event => {
 		let curr_year=new Date().getFullYear();
+		const phone= document.getElementById('phone').value
 		const aadhaar = document.getElementById('aadhaar').value;
 		const dob = document.getElementById('dob').value;
 		var http = new XMLHttpRequest();
 		var url = 'voter/authenticate';
-		var params = 'aadhaar=' + aadhaar + '&dob=' + dob;
+		var params = 'aadhaar=' + aadhaar + '&dob=' + dob+'&phone='+phone;
 		http.open('POST', url, true);
 		//Send the proper header information along with the request
 		http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -78,7 +87,10 @@ class LoginForm extends Component {
 					else{
 						Cookies.set('voter_aadhaar', encodeURI(aadhaar));
 						Cookies.set('address', encodeURI(responseObj.data.election_address));
-						Router.push(`/election/${responseObj.data.election_address}/vote`);
+						Cookies.set('voter_phone', encodeURI(phone));
+						Cookies.set('voter_dob', encodeURI(dob));
+						
+						Router.push(`/otp`);
 					}
 				}  
 				else if(responseObj.election_status == "end"){

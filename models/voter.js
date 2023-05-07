@@ -4,8 +4,8 @@ const saltRounds = 10;
 //Define a schema
 const Schema = mongoose.Schema;
 const VoterSchema = new Schema ({
-    email: {
-        type: String,
+    phone: {
+        type: Number,
         required: true,
     },
     dob:{

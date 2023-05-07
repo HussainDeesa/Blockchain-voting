@@ -3,6 +3,7 @@ const router = express.Router();
 const voterController = require('../controllers/voter');
 router.post('/register', voterController.create);
 router.post('/authenticate', voterController.authenticate);
+router.post('/generatehash', voterController.generateHash);
 router.post('/', voterController.getAll);
 router.put('/:voterId', voterController.updateById);
 router.delete('/:voterId', voterController.deleteById);
