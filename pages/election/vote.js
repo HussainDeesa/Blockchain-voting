@@ -135,7 +135,7 @@ class VotingList extends Component {
         var responseObj = JSON.parse(http.responseText);
         if (responseObj.status == 'success') {
           console.log("HASH :"+responseObj.data.hash);
-          await election.methods.vote(e, Cookies.get('voter_aadhaar')).send({ from: accounts[0] }); 
+          await election.methods.vote(e, responseObj.data.hash).send({ from: accounts[0] }); 
           alert("Voted!")
         }
       }

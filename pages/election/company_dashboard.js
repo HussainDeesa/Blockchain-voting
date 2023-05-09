@@ -88,7 +88,8 @@ class ContainerExampleContainer extends Component {
 			console.log(election);
 			const summary = await election.methods.getElectionDetails().call();
 			console.log(summary);
-			const v = await election.methods.getNumOfVoters().call();
+			const v = await election.methods.getNumOfVotersHash().call();
+			console.log(v);
 			this.setState({ voters: v });
 			const c = await election.methods.getNumOfCandidates().call();
 			this.setState({ candidates: c });
@@ -256,7 +257,7 @@ class ContainerExampleContainer extends Component {
 									End election
 								</Button>
 								<Step.Group style={{ minWidth: 1130, minHeight: 90 }}>
-									<Step icon="users" title="Voters" description={this.state.b} />
+									<Step icon="users" title="Voters" description={this.state.voters} /> 
 									<Step icon="user outline" title="Candidates" description={this.state.candidates} />
 									<Step
 										icon="chart bar outline"

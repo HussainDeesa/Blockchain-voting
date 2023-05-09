@@ -5,10 +5,20 @@ import { Router } from '../routes';
 import { Helmet } from 'react-helmet';
 
 class LoginForm extends Component {
-	
 	state = {
 		election_address: '',
+		genotp:0
+		
 	};
+	 componentDidMount() {
+		var minm = 100000;
+		var maxm = 999999;
+		let genotp= Math.floor(Math.random() * (maxm - minm + 1)) + minm;
+		alert("You OTP is "+genotp)
+		this.setState({genotp:genotp})
+	}
+	
+	
 
 	LoginForm = () => (
 		<div className="login-form">
@@ -48,9 +58,9 @@ class LoginForm extends Component {
 		</div>
 	);
 	signin = event => {
-		
-		const otp = document.getElementById('otp').value;
-        if(otp==123456){
+	
+		const otp = document.getElementById('otp').value;		
+        if(otp==this.state.genotp){
 				
 			Router.push(`/election/${Cookies.get('address')}/vote`);
         }
@@ -61,6 +71,7 @@ class LoginForm extends Component {
 
 	render() {
 		return (
+			
 			<div>
 				<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
 				<Helmet>

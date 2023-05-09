@@ -1,6 +1,4 @@
 import Web3 from 'web3';
-// import '@metamask/legacy-web3'
-// const { Web3 } = window
 let web3;
 
 if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
@@ -15,13 +13,5 @@ else {
 	web3 = new Web3(provider);
 	console.log('Web3 else: ', web3);
 }
-
-
-	// const provider = new Web3.providers.HttpProvider('https://goerli.infura.io/v3/44799d6cf93c4abc8890c892de23c3fb');
-	// web3 = new Web3(provider);
-	// console.log('Web3 else: ', web3);
-	// console.log(web3.eth.net.getId());
-
-
 
 export default web3;

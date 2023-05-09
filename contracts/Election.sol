@@ -1,6 +1,6 @@
 pragma solidity ^0.4.25;
 contract ElectionFact {
-    
+        
     struct ElectionDet {
         address deployedAddress;
         string el_n;
@@ -138,7 +138,7 @@ contract Election {
 }
 
 
-// //Updated
+//Updated
 
 // pragma solidity ^0.4.25;
 // contract ElectionFact {
@@ -247,13 +247,6 @@ contract Election {
 //         uint8 voterID=voterCount++;
 //         voterhashes[voterID] = VoterHash(hash); //add the values to the mapping
 //     }
-//      function getNumOfVotersHash() public view returns(uint8) {
-//         return voterCount;
-//     }
-
-//       function getVoter(uint8 VoterID) public view returns (string memory) {
-//         return (voterhashes[VoterID].hash);
-//     } 
 //      function uintToString(uint v) internal pure returns (string memory) {
 //         uint maxLength = 100;
 //         bytes memory reversed = new bytes(maxLength);
@@ -310,7 +303,6 @@ contract Election {
 
 //     //function to get candidate information
 
-  
 //     function getCandidate(uint8 candidateID) public view returns (string memory, string memory, string memory, uint8,string memory) {
 //         return (candidates[candidateID].candidate_name, candidates[candidateID].candidate_description, candidates[candidateID].imgHash, candidates[candidateID].voteCount, candidates[candidateID].email);
 //     } 

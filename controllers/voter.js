@@ -7,10 +7,9 @@ const { createHmac }= require("node:crypto");
 const murmurhash = require('murmurhash')
 var nodemailer = require("nodemailer");
 const { log } = require("console");
-
 const saltRounds = 10;
 
-module.exports = {
+module.exports = { 
   create: function (req, res, cb) {
     VoterModel.findOne(
       { phone: req.body.phone, election_address: req.body.election_address },
@@ -78,50 +77,19 @@ module.exports = {
     console.log(req.body.aadhaar);
     console.log(req.body.dob);
     console.log(req.body.aadhaar+req.body.dob);
-    const salt = await bcrypt.genSalt(10)
+
+
     data=req.body.aadhaar+req.body.dob+req.body.phone
     veriferhash=murmurhash.v2(data)
     console.log("Verifer hash "+veriferhash);
-    VoterModel.findOne( 
-      { aadhaar: req.body.aadhaar, dob: req.body.dob,phone:req.body.phone },
-      async function (err, voterInfo) {
-       const salt = await bcrypt.genSalt(10)
-      if(voterInfo){
-        proverdata=voterInfo.aadhaar+voterInfo.dob+voterInfo.phone
-        proverhash=murmurhash.v2(proverdata)
-        console.log("Prover hash "+proverhash);
-      }
-        if (err) cb(err);
-        else {
-          if (voterInfo && voterInfo.election_status==true){
-            console.log("ZKP status true");
-            res.json({
-              status: "success",
-              message: "voter found!!!",
-              data: {
-                id: voterInfo._id,
-                election_address: voterInfo.election_address,
-                dob:voterInfo.dob
-              },
-            }); 
-          }
-          else if(voterInfo && voterInfo.election_status==false){
-            res.json({
-              election_status:"end",
-            });
-          }
-          //res.sendFile(path.join(__dirname+'/index.html'));
-          else {
-            console.log("ZKP status false");
-            res.json({
-              status: "error",
-              message: "Invalid Crediantials!",
-              data: null,
-            });
-          }
-        }
-      }
-    );
+    res.json({
+      status: "success",
+      message: "voter found!!!",
+      data: {
+        hash:veriferhash
+      },
+    }); 
+
   },
 
   changestatus: function (req, res, cb) {
