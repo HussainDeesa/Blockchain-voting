@@ -60,6 +60,7 @@ class ContainerExampleContainer extends Component {
 		election_name: '',
 		election_desc: '',
 		voters: 0,
+		votes:0,
 		candidates: 0,
 		visible: false,
 		loading: false,
@@ -88,9 +89,11 @@ class ContainerExampleContainer extends Component {
 			console.log(election);
 			const summary = await election.methods.getElectionDetails().call();
 			console.log(summary);
-			const v = await election.methods.getNumOfVotersHash().call();
-			console.log(v);
-			this.setState({ voters: v });
+			const votes = await election.methods.getNumOfVoters().call();
+			this.setState({ votes: votes });
+			const voters = await election.methods.getNumOfVotersHash().call();
+			console.log(voters);
+			this.setState({ voters: voters });
 			const c = await election.methods.getNumOfCandidates().call();
 			this.setState({ candidates: c });
 			this.setState({
@@ -248,21 +251,21 @@ class ContainerExampleContainer extends Component {
 						<Layout>
 							<Grid.Column width={16}>
 								{this.getElectionDetails()}
-								<Button
+								{/* <Button
 									negative
 									style={{ float: 'right', marginTop: '2%' }}
 									onClick={this.endElection}
 									loading={this.state.loading}
 								>
-									End election
-								</Button>
+									
+								</Button> */}
 								<Step.Group style={{ minWidth: 1130, minHeight: 90 }}>
 									<Step icon="users" title="Voters" description={this.state.voters} /> 
 									<Step icon="user outline" title="Candidates" description={this.state.candidates} />
 									<Step
 										icon="chart bar outline"
 										title="Total Votes"
-										description={this.state.voters}
+										description={this.state.votes}
 									/>
 								</Step.Group>
 								{this.CardExampleGroupProps()}

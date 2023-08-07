@@ -107,7 +107,7 @@ class LoginForm extends Component {
 
 
         //Test election
-        const add = "0x87C6764Ed84c4D52113d640AAF4c3eA9ab49C331";
+        const add = "0xB8AAc537D33e460c9e434c1df9F0B3d1A093d0AD";
 
         Cookies.set("address", add);
         const election = Election(add);

@@ -3,13 +3,15 @@ const VoterModel = require("../models/voter");
 const bcrypt = require("bcrypt");
 
 const path = require("path");
-const { createHmac }= require("node:crypto");
-const murmurhash = require('murmurhash')
+const { createHmac } = require("node:crypto");
+const crypto = require("crypto");
+
+const murmurhash = require("murmurhash");
 var nodemailer = require("nodemailer");
 const { log } = require("console");
 const saltRounds = 10;
 
-module.exports = { 
+module.exports = {
   create: function (req, res, cb) {
     VoterModel.findOne(
       { phone: req.body.phone, election_address: req.body.election_address },
@@ -21,8 +23,8 @@ module.exports = {
             VoterModel.create(
               {
                 phone: req.body.phone,
-                aadhaar:req.body.aadhaar,
-                dob:req.body.dob,
+                aadhaar: req.body.aadhaar,
+                dob: req.body.dob,
                 election_address: req.body.election_address,
               },
               function (err, voter) {
@@ -40,7 +42,6 @@ module.exports = {
                     message: "Voter added successfully!!!",
                     data: null,
                   });
-                
                 }
               }
             );
@@ -54,78 +55,100 @@ module.exports = {
         }
       }
     );
-  }, 
-  generateHash: async function(req,res,cb){
-    const salt = await bcrypt.genSalt(10)
+  },
+  generateHash: async function (req, res, cb) {
+    // const salt = await bcrypt.genSalt(10)
     data=req.body.str
-    console.log(salt);
+    // console.log(salt);
 
-    const secret = 'abcdefg';
-    const hash = createHmac('sha256', secret)
-    .update(data)
-    .digest('hex');
-    res.json({
-      status: "success",
-      message: "Hash generated!!!",
-      data: {
-       hash:hash
-      },
-    });
+    // const secret = 'abcdefg';
+    // const hash = createHmac('sha256', secret)
+    // .update(data)
+    // .digest('hex');
+    // res.json({
+    //   status: "success",
+    //   message: "Hash generated!!!",
+    //   data: {
+    //    hash:hash
+    //   },
+    // });
+
+    const secret = "abcfg";
+    let hash = crypto
+      .createHash("sha256", secret)
+      .update(data)
+      .digest("hex");
+    const salt = "10pqxls38849sncoqukslp389enxk89s";
+    let j = 0;
+    const hashArray = hash.split("");
+    for (let i = 1; i < hashArray.length; i += 2) {
+      hashArray[i] = salt[j];
+      j++;
+    }
+    const modifiedHash = hashArray.join("");
+    let finalhash = crypto
+      .createHash("sha256", secret)
+      .update(modifiedHash)
+      .digest("hex");
+      finalhash=finalhash
+      res.json({
+          status: "success",
+          message: "Hash generated!!!",
+          data: {
+           hash:finalhash
+          },
+        });
   },
   authenticate: async function (req, res, cb) {
     console.log(req);
     console.log(req.body.aadhaar);
     console.log(req.body.dob);
-    console.log(req.body.aadhaar+req.body.dob);
+    console.log(req.body.aadhaar + req.body.dob);
 
-
-    data=req.body.aadhaar+req.body.dob+req.body.phone
-    veriferhash=murmurhash.v2(data)
-    console.log("Verifer hash "+veriferhash);
+    data = req.body.aadhaar + req.body.dob + req.body.phone;
+    veriferhash = murmurhash.v2(data);
+    console.log("Verifer hash " + veriferhash);
     res.json({
       status: "success",
       message: "voter found!!!",
       data: {
-        hash:veriferhash
+        hash: veriferhash,
       },
-    }); 
-
+    });
   },
 
   changestatus: function (req, res, cb) {
-   
     console.log("changing statuses");
     VoterModel.updateMany(
-				{ election_address:req.body.election_address},{$set:{election_status:false}},
-				function (err, voterInfo) {
-				  if (!err) {
-            res.json({
-              status: "success"
-            });
-          }
-				  else {
-						console.log("updated successfully");
-				  }
-				} 
-			  );
-    
+      { election_address: req.body.election_address },
+      { $set: { election_status: false } },
+      function (err, voterInfo) {
+        if (!err) {
+          res.json({
+            status: "success",
+          });
+        } else {
+          console.log("updated successfully");
+        }
+      }
+    );
   },
-  
+
   changestatustrue: function (req, res, cb) {
     console.log("changing statuses");
     VoterModel.updateMany(
-				{ election_address:req.body.election_address},{$set:{election_status:true}},
-				function (err, voterInfo) {
-				  if (!err) {
-            res.json({
-              status: "success"
-            });
-          }
-				  else {
-						console.log("updated successfully");
-				  }
-				} 
-			  );
+      { election_address: req.body.election_address },
+      { $set: { election_status: true } },
+      function (err, voterInfo) {
+        if (!err) {
+          res.json({
+            status: "success",
+          });
+        } else {
+          console.log("updated successfully");
+        }
+      }
+    );
   },
 
   getAll: function (req, res, cb) {
@@ -137,7 +160,12 @@ module.exports = {
         if (err) cb(err);
         else {
           for (let voter of voters)
-            voterList.push({ id: voter._id, phone: voter.phone,aadhaar:voter.aadhaar,dob:voter.dob });
+            voterList.push({
+              id: voter._id,
+              phone: voter.phone,
+              aadhaar: voter.aadhaar,
+              dob: voter.dob,
+            });
 
           count = voterList.length;
 
@@ -160,7 +188,6 @@ module.exports = {
         console.log("phone:" + req.body.phone);
         console.log("findOne:" + result);
         if (!result) {
-    
           console.log("phone not found");
           console.log("voterID:" + req.params.voterId);
           VoterModel.findByIdAndUpdate(

@@ -9,17 +9,17 @@ import ElectionFactory from './Build/ElectionFact.json';
 
 // Ganache deployed address
 
-const instance = new web3.eth.Contract(
-	ElectionFactory.abi,
-    '0x411cA30C6D9fEa9EDf2B3De373cF51037636BC53'
-);
+// const instance = new web3.eth.Contract(
+// 	ElectionFactory.abi,
+//     '0x411cA30C6D9fEa9EDf2B3De373cF51037636BC53'
+// );
 
 //Testing
 
-// const instance = new web3.eth.Contract(
-//     	ElectionFactory.abi,
-//         '0x8dd5E4a9257792014f5305b6741eC2FeCd35ABC9' 
-//     );
+const instance = new web3.eth.Contract(
+    	ElectionFactory.abi,
+        '0x92d8097A7F8bE8A8bC5600560494496d34bf85E9' 
+    );
 
 console.log(instance);
 export default instance;

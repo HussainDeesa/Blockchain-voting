@@ -346,7 +346,7 @@ class VotingList extends Component {
         alert("Error in file processing.");
       }
         if (find == true) {
-         alert("User Already exists");
+         alert("Voter Already exists");
         }
        
       }
